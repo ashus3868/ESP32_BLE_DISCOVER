@@ -31,18 +31,22 @@ static int device_write(uint16_t conn_handle, uint16_t attr_handle, struct ble_g
     if (strcmp(data, (char *)"LIGHT ON\0") == 0)
     {
         printf("LIGHT ON\n");
+        gpio_set_level(GPIO_NUM_2,1);
     }
     else if (strcmp(data, (char *)"LIGHT OFF\0") == 0)
     {
         printf("LIGHT OFF\n");
+        gpio_set_level(GPIO_NUM_2,0);
     }
-    else if (strcmp(data, (char *)"FAN ON\0") == 0)
+    else if (strcmp(data, (char *)"LED ON\0") == 0)
     {
-        printf("FAN ON\n");
+        printf("LED ON\n");
+        gpio_set_level(GPIO_NUM_13,1);
     }
-    else if (strcmp(data, (char *)"FAN OFF\0") == 0)
+    else if (strcmp(data, (char *)"LED OFF\0") == 0)
     {
-        printf("FAN OFF\n");
+        printf("LED OFF\n");
+        gpio_set_level(GPIO_NUM_13,0);
     }
     else
     {
@@ -190,7 +194,8 @@ void boot_creds_clear(void *param)
 void app_main()
 {
     gpio_set_direction(GPIO_NUM_0, GPIO_MODE_INPUT);
-
+    gpio_set_direction(GPIO_NUM_2, GPIO_MODE_OUTPUT);
+    gpio_set_direction(GPIO_NUM_13, GPIO_MODE_OUTPUT);
     connect_ble();
     xTaskCreate(boot_creds_clear, "boot_creds_clear", 2048, NULL, 5, NULL);
 }
